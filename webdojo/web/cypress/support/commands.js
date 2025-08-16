@@ -10,6 +10,9 @@ Cypress.Commands.add('start', ()=>{
 })
 
 Cypress.Commands.add('goTo', (buttonName, pageTitle)=>{
-    cy.contains('button', buttonName).should('be.visible').click()
+    cy.contains('h4', buttonName).should('be.visible').click()
     cy.contains('h1', pageTitle).should('be.visible')
+})
+Cypress.Commands.add('checkItem', (checkItem)=> {
+    cy.contains(checkItem).should('be.visible')
 })
