@@ -52,21 +52,51 @@ describe('Formulário de Consultoria', () => {
                 .type(tech)
                 .type('{enter}');
 
-                cy.contains('label', 'Tecnologias')
+            cy.contains('label', 'Tecnologias')
                 .parent()
                 .find('span', tech)
                 .should('be.visible')
-        
+
         });
 
         cy.contains('span', 'Li e aceito os')
-        .prev()
-        .check({force:true})
+            .prev()
+            .check({ force: true })
 
         cy.contains('button', 'Enviar formulário').click()
         cy.contains('h3', 'Sucesso!')
-        .should('be.visible')
-      
+            .should('be.visible')
+
+
+    });
+
+    it.only('Deve verificar os campos obrigatórios', () => {
+        cy.start()
+        cy.submitLoginForm('papito@webdojo.com', 'katana123')
+        cy.goTo('Formulários', 'Consultoria')
+        cy.contains('button', 'Enviar formulário').click()
+
+        cy.contains('label', 'Nome Completo *')
+            .parent()
+            .find('p')
+            .should('have.text', 'Digite nome e sobrenome')
+            .and('have.class', 'text-red-400')
+            .and('have.css', 'color', 'rgb(248, 113, 113)')
+
+            cy.contains('label', 'Email *')
+            .closest('div') // ou .parent() se for só 1 nível
+            .find('p')
+            .should('contain.text', 'Informe um email válido')
+            .and('have.class', 'text-red-400')
+            .and('have.css', 'color', 'rgb(248, 113, 113)')
+          
+
+        cy.contains('span', 'Li e aceito os')
+            .closest('div')   // pega o div pai que envolve label + p
+            .find('p')
+            .should('have.text', 'Você precisa aceitar os termos de uso')
+            .and('have.class', 'text-red-400')
+            .and('have.css', 'color', 'rgb(248, 113, 113)')
 
     });
 });
